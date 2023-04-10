@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "npm run build && scp -r ./out/* endo@sphyrna.rd.oit.ac.jp:public_html/"
   },
   "dependencies": {
     "@types/node": "18.15.11",
