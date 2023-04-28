@@ -72,7 +72,7 @@ export default function Home() {
   }, []);
   return (
     <main>
-      <p className="text-3xl font-bold md:text-6xl h-full flex justify-center items-center">
+      <p className="flex h-full items-center justify-center text-3xl font-bold md:text-6xl">
         Hello! My name is nikuda.
       </p>
       <canvas id="canvas"></canvas>
