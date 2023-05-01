@@ -11,24 +11,19 @@ export const MyRoom = () => {
   useEffect(() => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff); // 背景色を白色に設定
-
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.5,
       1000
     );
-    camera.position.z = 5;
-    camera.position.y = 5;
-    camera.position.x = -3;
+    camera.position.set(-3, 5, 5);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     const mount = mountRef.current;
-    if (mount !== null) {
-      mount.appendChild(renderer.domElement);
-    }
+    if (mount) mount.appendChild(renderer.domElement);
 
     const loader = new GLTFLoader();
     loader.load(
@@ -65,12 +60,12 @@ export const MyRoom = () => {
     scene.add(directionalLight);
 
     // アニメーション
-    const tick = () => {
+    const animate = () => {
       controls.update();
       renderer.render(scene, camera);
-      requestAnimationFrame(tick);
+      requestAnimationFrame(animate);
     };
-    tick();
+    animate();
   }, []);
 
   return (
