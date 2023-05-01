@@ -1,81 +1,12 @@
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import { Loading } from "@/components/Loading";
+import { MyRoom } from "@/components/MyRoom";
 
 export default function Home() {
-  const canvasRef = useRef<HTMLElement | null>(null);
-  useEffect(() => {
-    // canvasを取得
-    canvasRef.current = document.getElementById("canvas");
-    // シーン
-    const scene = new THREE.Scene();
-
-    // サイズ
-    const sizes = {
-      width: innerWidth,
-      height: innerHeight,
-    };
-
-    // カメラ
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      sizes.width / sizes.height,
-      0.1,
-      1000
-    );
-
-    // レンダラー
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current as HTMLCanvasElement,
-      antialias: true,
-      alpha: true,
-    });
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(window.devicePixelRatio);
-
-    // ボックスジオメトリー
-    const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const boxMaterial = new THREE.MeshLambertMaterial({
-      color: "#2497f0",
-    });
-    const box = new THREE.Mesh(boxGeometry, boxMaterial);
-    box.position.z = -5;
-    box.rotation.set(10, 10, 10);
-    scene.add(box);
-
-    // ライト
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-    scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xffffff, 0.2);
-    pointLight.position.set(1, 2, 3);
-    scene.add(pointLight);
-
-    // アニメーション
-    const clock = new THREE.Clock();
-    const tick = () => {
-      const elapsedTime = clock.getElapsedTime();
-      box.rotation.x = elapsedTime;
-      box.rotation.y = elapsedTime;
-      window.requestAnimationFrame(tick);
-      renderer.render(scene, camera);
-    };
-    tick();
-
-    // ブラウザのリサイズ処理
-    window.addEventListener("resize", () => {
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(window.devicePixelRatio);
-    });
-  }, []);
   return (
     <main>
-      <p className="flex h-full items-center justify-center text-3xl font-bold md:text-6xl">
-        Hello! My name is nikuda.
-      </p>
-      <canvas id="canvas"></canvas>
+      {/* <BoxGL /> */}
+      <MyRoom />
+      {/* <Loading /> */}
     </main>
   );
 }
