@@ -1,85 +1,42 @@
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import { ChaoticOrbit } from "@uiball/loaders";
 
+import { MyRoomModel } from "./MyRoomModel";
+
 export const MyRoom = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-  const [isRendered, setIsRendered] = useState(false);
-
-  useEffect(() => {
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff); // 背景色を白色に設定
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.5,
-      1000
-    );
-    camera.position.set(-3, 5, 5);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    const mount = mountRef.current;
-    if (mount) mount.appendChild(renderer.domElement);
-
-    const loader = new GLTFLoader();
-    loader.load(
-      "/asset/myRoom.gltf",
-      (gltf) => {
-        // gltfファイルの読み込みが完了したときに呼び出される
-        scene.add(gltf.scene);
-        setIsRendered(true);
-      },
-      (progress) => {
-        // gltfファイルの読み込み中に呼び出される
-        console.log("Loading: ", progress);
-      },
-      (error) => {
-        // gltfファイルの読み込みにエラーが発生したときに呼び出される
-        console.error(error);
-      }
-    );
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 2, 0); // カメラの中心を上に移動
-    controls.enableDamping = true; // 慣性の有効化
-    controls.dampingFactor = 0.05; // 慣性の減衰率
-    controls.enablePan = false; // パン操作の無効化
-    controls.minDistance = 1; // ズームインの最小距離
-    controls.maxDistance = 10; // ズームアウトの最大距離
-    controls.maxPolarAngle = Math.PI / 2; // 上方向への回転の制限
-    controls.minAzimuthAngle = -Math.PI / 4; //　左右の回転の制限
-    controls.maxAzimuthAngle = Math.PI / 4;
-
-    // ライト
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 2, 3);
-    scene.add(directionalLight);
-
-    // アニメーション
-    const animate = () => {
-      controls.update();
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    };
-    animate();
-  }, []);
-
+  const [isLoaded, setIsLoaded] = useState(false);
   return (
     <>
-      {!isRendered && (
+      <Canvas>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} />
+        <OrbitControls
+          target={[0, 2.5, 0]} // カメラの中心を上に移動
+          enableDamping={true} // 慣性の有効化
+          dampingFactor={0.05} // 慣性の減衰率
+          enablePan={false} // パン操作の無効化
+          minDistance={1} // ズームインの最小距離
+          maxDistance={10} // ズームアウトの最大距離
+          maxPolarAngle={Math.PI / 2} // 上方向への回転の制限
+          minAzimuthAngle={-Math.PI / 4} //　左右の回転の制限
+          maxAzimuthAngle={Math.PI / 4}
+        />
+        <MyRoomModel
+          onLoaded={() => {
+            setIsLoaded(true);
+          }}
+        />
+      </Canvas>
+      {!isLoaded && (
         <div className="absolute left-1/2 top-1/2 z-20 flex">
           <ChaoticOrbit size={50} speed={1.5} color="black" />
         </div>
       )}
       <div
-        ref={mountRef}
-        className="z-10"
         onClick={() => {
-          console.log("clicked");
+          // console.log("clicked");
           // gltfのアニメーションを再生
         }}
       />
