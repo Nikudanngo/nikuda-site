@@ -131,7 +131,7 @@ interface MyRoomModelProps {
 export function MyRoomModel(props: MyRoomModelProps) {
   const group = useRef<THREE.Group>(null);
   const { nodes, materials, animations } = useGLTF(
-    "/assets/myRoom.gltf"
+    `${process.env.NEXT_PUBLIC_HOSTING_URL}/assets/myRoom.gltf`
   ) as GLTFResult;
   const { actions } = useAnimations(animations, group);
 
@@ -635,4 +635,4 @@ export function MyRoomModel(props: MyRoomModelProps) {
   );
 }
 
-useGLTF.preload("/assets/myRoom.gltf");
+useGLTF.preload(`${process.env.NEXT_PUBLIC_HOSTING_URL}/assets/myRoom.gltf`);
