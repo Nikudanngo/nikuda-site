@@ -117,23 +117,26 @@ type GLTFResult = GLTF & {
     マテリアル: THREE.MeshStandardMaterial;
     floor: THREE.MeshStandardMaterial;
   };
+  animations: GLTFAction[];
 };
 
 type ActionName = "macbook.007Action";
-type GLTFActions = Record<ActionName, THREE.AnimationAction>;
-
+interface GLTFAction extends THREE.AnimationClip {
+  name: ActionName;
+}
 interface MyRoomModelProps {
   onLoaded?: () => void;
 }
 
 export function MyRoomModel(props: MyRoomModelProps) {
-  const group = useRef<THREE.Group>();
+  const group = useRef<THREE.Group>(null);
   const { nodes, materials, animations } = useGLTF(
     "/assets/myRoom.gltf"
   ) as GLTFResult;
-  const { actions } = useAnimations<GLTFActions>(animations, group);
+  const { actions } = useAnimations(animations, group);
+
   const handleMacbookClick = () => {
-    actions["macbook.007Action"].setLoop(THREE.LoopOnce).play();
+    actions["macbook.007Action"]?.setLoop(THREE.LoopOnce, 1).play();
   };
 
   useEffect(() => {
