@@ -6,6 +6,7 @@ import * as THREE from "three";
 import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations, OrbitControls, Html } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
+import { PerspectiveCamera } from "@react-three/drei";
 
 const isProd = process.env.NODE_ENV === "production";
 type GLTFResult = GLTF & {
@@ -18,7 +19,6 @@ type GLTFResult = GLTF & {
     ["Sensor-Bajo-drc_Negro_0"]: THREE.Mesh;
     ["Sensor-Bajo-Izq_Negro_0"]: THREE.Mesh;
     ["Volumen_+_-__0"]: THREE.Mesh;
-    table: THREE.Mesh;
     monitor001: THREE.Mesh;
     arm: THREE.Mesh;
     monitor002: THREE.Mesh;
@@ -59,13 +59,12 @@ type GLTFResult = GLTF & {
     Body13001_1: THREE.Mesh;
     Body13001_2: THREE.Mesh;
     Body13001_3: THREE.Mesh;
+    table002: THREE.Mesh;
     Body13007: THREE.Mesh;
     Body13007_1: THREE.Mesh;
     Body13007_2: THREE.Mesh;
     Body13007_3: THREE.Mesh;
-    table002: THREE.Mesh;
     cup001: THREE.Mesh;
-    floor: THREE.Mesh;
   };
   materials: {
     ["Lentes.001"]: THREE.MeshStandardMaterial;
@@ -73,8 +72,8 @@ type GLTFResult = GLTF & {
     ["OnOff.001"]: THREE.MeshStandardMaterial;
     ["Negro.001"]: THREE.MeshStandardMaterial;
     ["Carcaza.001"]: THREE.MeshStandardMaterial;
-    ["マテリアル.003"]: THREE.MeshStandardMaterial;
     moniter: THREE.MeshStandardMaterial;
+    ["マテリアル.003"]: THREE.MeshStandardMaterial;
     coffee: THREE.MeshStandardMaterial;
     ["BLUE JOY-CON PLASTIC"]: THREE.MeshStandardMaterial;
     ["PLASTIC SHINY"]: THREE.MeshStandardMaterial;
@@ -110,18 +109,17 @@ type GLTFResult = GLTF & {
     ["Bronze_-_Polished"]: THREE.MeshStandardMaterial;
     ["Aluminum_-_Anodized_Glossy_(Grey)_keyboard.jpg"]: THREE.MeshStandardMaterial;
     ["Steel_-_Satin"]: THREE.MeshStandardMaterial;
+    wood: THREE.MeshStandardMaterial;
     ["Acrylic_(Clear)"]: THREE.MeshStandardMaterial;
     ["Aluminum_-_Anodized_Glossy_(Grey)"]: THREE.MeshStandardMaterial;
     ["Plastic_-_Translucent_Matte_(Gray)"]: THREE.MeshStandardMaterial;
     ["Glass_-_Heavy_Color"]: THREE.MeshStandardMaterial;
-    wood: THREE.MeshStandardMaterial;
     マテリアル: THREE.MeshStandardMaterial;
-    floor: THREE.MeshStandardMaterial;
   };
   animations: GLTFAction[];
 };
 
-type ActionName = "macbook.007Action";
+type ActionName = "cameraAction" | "macbook.007Action";
 interface GLTFAction extends THREE.AnimationClip {
   name: ActionName;
 }
@@ -138,7 +136,7 @@ export function MyRoomModel(props: MyRoomModelProps) {
   const { actions } = useAnimations(animations, group);
 
   const handleMacbookClick = () => {
-    actions["macbook.007Action"]?.setLoop(THREE.LoopOnce, 1).play();
+    actions["macbook.007Action" as ActionName]?.reset().play();
   };
 
   useEffect(() => {
@@ -159,18 +157,35 @@ export function MyRoomModel(props: MyRoomModelProps) {
         enablePan={false} // パン操作の無効化
         minDistance={1} // ズームインの最小距離
         maxDistance={10} // ズームアウトの最大距離
-        maxPolarAngle={Math.PI / 2} // 上方向への回転の制限
-        minAzimuthAngle={-Math.PI / 4} //　左右の回転の制限
-        maxAzimuthAngle={Math.PI / 4}
+        // maxPolarAngle={Math.PI / 2} // 上方向への回転の制限
+        // minAzimuthAngle={-Math.PI / 4} //　左右の回転の制限
+        // maxAzimuthAngle={Math.PI / 4}
       />
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">
           <group
-            name="Sketchfab_model"
+            name="camera"
+            position={[-8.22, 6.98, 13.65]}
+            rotation={[1.31, -0.16, 0.54]}
+            scale={3.07}
+            userData={{ name: "camera" }}
+          >
+            <PerspectiveCamera
+              name="camera_Orientation"
+              makeDefault={false}
+              far={1000}
+              near={0.1}
+              fov={22.9}
+              rotation={[-Math.PI / 2, 0, 0]}
+              userData={{ name: "camera_Orientation" }}
+            />
+          </group>
+          <group
+            name="oculus"
             position={[-2.71, 2.15, 0.59]}
             rotation={[-Math.PI / 2, 0, 0.64]}
             scale={0.33}
-            userData={{ name: "Sketchfab_model" }}
+            userData={{ name: "oculus" }}
           >
             <group
               name="7c44c98961904fa5a7adccdbff581711fbx"
@@ -224,26 +239,36 @@ export function MyRoomModel(props: MyRoomModelProps) {
                   >
                     <mesh
                       name="Lente_Lentes_0001"
+                      castShadow
+                      receiveShadow
                       geometry={nodes.Lente_Lentes_0001.geometry}
                       material={materials["Lentes.001"]}
                     />
                     <mesh
                       name="Lente_Lentes_0001_1"
+                      castShadow
+                      receiveShadow
                       geometry={nodes.Lente_Lentes_0001_1.geometry}
                       material={materials["Power_Botton__0.001"]}
                     />
                     <mesh
                       name="Lente_Lentes_0001_2"
+                      castShadow
+                      receiveShadow
                       geometry={nodes.Lente_Lentes_0001_2.geometry}
                       material={materials["OnOff.001"]}
                     />
                     <mesh
                       name="Lente_Lentes_0001_3"
+                      castShadow
+                      receiveShadow
                       geometry={nodes.Lente_Lentes_0001_3.geometry}
                       material={materials["Negro.001"]}
                     />
                     <mesh
                       name="Lente_Lentes_0001_4"
+                      castShadow
+                      receiveShadow
                       geometry={nodes.Lente_Lentes_0001_4.geometry}
                       material={materials["Carcaza.001"]}
                     />
@@ -282,6 +307,8 @@ export function MyRoomModel(props: MyRoomModelProps) {
                 >
                   <mesh
                     name="Sensor-Bajo-drc_Negro_0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["Sensor-Bajo-drc_Negro_0"].geometry}
                     material={materials["Negro.001"]}
                     userData={{ name: "Sensor-Bajo-drc_Negro_0" }}
@@ -296,6 +323,8 @@ export function MyRoomModel(props: MyRoomModelProps) {
                 >
                   <mesh
                     name="Sensor-Bajo-Izq_Negro_0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["Sensor-Bajo-Izq_Negro_0"].geometry}
                     material={materials["Negro.001"]}
                     userData={{ name: "Sensor-Bajo-Izq_Negro_0" }}
@@ -336,6 +365,8 @@ export function MyRoomModel(props: MyRoomModelProps) {
                 >
                   <mesh
                     name="Volumen_+_-__0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["Volumen_+_-__0"].geometry}
                     material={materials["Power_Botton__0.001"]}
                     userData={{ name: "Volumen + -__0" }}
@@ -345,14 +376,9 @@ export function MyRoomModel(props: MyRoomModelProps) {
             </group>
           </group>
           <mesh
-            name="table"
-            geometry={nodes.table.geometry}
-            material={materials["マテリアル.003"]}
-            scale={[0.11, 1, 0.15]}
-            userData={{ name: "table" }}
-          />
-          <mesh
             name="monitor001"
+            castShadow
+            receiveShadow
             geometry={nodes.monitor001.geometry}
             material={materials.moniter}
             position={[-0.24, 3.74, -1.26]}
@@ -361,16 +387,20 @@ export function MyRoomModel(props: MyRoomModelProps) {
           />
           <Html
             className="fixed left-0 top-0 h-full w-full"
-            position={[-1.6, 4.5, -1.26]}
-            // scale={[0.5, 0.5, 0.5]}
+            position={[-1.57, 4.5, -1.21]}
+            distanceFactor={1.5}
+            transform
+            occlude
           >
             <iframe
-              className="h-[140px] w-[250px]"
+              className="h-[400px] w-[710px] p-2"
               src="https://www.youtube.com/embed/5qap5aO4i9A"
             />
           </Html>
           <mesh
             name="arm"
+            castShadow
+            receiveShadow
             geometry={nodes.arm.geometry}
             material={materials.moniter}
             position={[1.25, 1.92, -1.64]}
@@ -379,6 +409,8 @@ export function MyRoomModel(props: MyRoomModelProps) {
           />
           <mesh
             name="monitor002"
+            castShadow
+            receiveShadow
             geometry={nodes.monitor002.geometry}
             material={materials.moniter}
             position={[2.46, 3.69, -0.75]}
@@ -386,8 +418,23 @@ export function MyRoomModel(props: MyRoomModelProps) {
             scale={[1.31, 0.74, 0.04]}
             userData={{ name: "monitor.002" }}
           />
+          <Html
+            className="fixed left-0 top-0 h-full w-full"
+            position={[1.2, 4.45, -1.18]}
+            rotation={[0, -0.37, 0]}
+            distanceFactor={1.5}
+            transform
+            occlude
+          >
+            <iframe
+              className="h-[400px] w-[710px] p-2"
+              src="https://www.youtube.com/embed/MVPTGNGiI-4"
+            />
+          </Html>
           <mesh
             name="cup"
+            castShadow
+            receiveShadow
             geometry={nodes.cup.geometry}
             material={materials["マテリアル.003"]}
             position={[1.99, 1.88, 0.75]}
@@ -397,6 +444,8 @@ export function MyRoomModel(props: MyRoomModelProps) {
           />
           <mesh
             name="table001"
+            castShadow
+            receiveShadow
             geometry={nodes.table001.geometry}
             material={materials["マテリアル.003"]}
             scale={[0.11, 1, 0.15]}
@@ -404,6 +453,8 @@ export function MyRoomModel(props: MyRoomModelProps) {
           />
           <mesh
             name="cup002"
+            castShadow
+            receiveShadow
             geometry={nodes.cup002.geometry}
             material={materials.coffee}
             position={[1.99, 1.88, 0.75]}
@@ -412,160 +463,220 @@ export function MyRoomModel(props: MyRoomModelProps) {
             userData={{ name: "cup.002" }}
           />
           <group
-            name="JOY-CON_L001"
+            name="switch"
             position={[-2.23, 2.23, -0.46]}
             rotation={[0, -0.61, -0.01]}
             scale={[0.42, 0.38, 0.42]}
-            userData={{ name: "JOY-CON L.001" }}
+            userData={{ name: "switch" }}
           >
             <mesh
               name="Cube077"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077.geometry}
               material={materials["BLUE JOY-CON PLASTIC"]}
             />
             <mesh
               name="Cube077_1"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_1.geometry}
               material={materials["PLASTIC SHINY"]}
             />
             <mesh
               name="Cube077_2"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_2.geometry}
               material={materials["BLUE PLASTIC SHINY"]}
             />
             <mesh
               name="Cube077_3"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_3.geometry}
               material={materials["LED.001"]}
             />
             <mesh
               name="Cube077_4"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_4.geometry}
               material={materials["PLASTIC.001"]}
             />
             <mesh
               name="Cube077_5"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_5.geometry}
               material={materials["SCREWS.001"]}
             />
             <mesh
               name="Cube077_6"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_6.geometry}
               material={materials["BLUE SEPARATION"]}
             />
             <mesh
               name="Cube077_7"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_7.geometry}
               material={materials["DOCK PLASTIC"]}
             />
             <mesh
               name="Cube077_8"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_8.geometry}
               material={materials["FRONT DOCK LOGO"]}
             />
             <mesh
               name="Cube077_9"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_9.geometry}
               material={materials["DOCK LED"]}
             />
             <mesh
               name="Cube077_10"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_10.geometry}
               material={materials["SD METAL"]}
             />
             <mesh
               name="Cube077_11"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_11.geometry}
               material={materials["USB-C "]}
             />
             <mesh
               name="Cube077_12"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_12.geometry}
               material={materials["USB 3.0"]}
             />
             <mesh
               name="Cube077_13"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_13.geometry}
               material={materials["STAND MATERIAL"]}
             />
             <mesh
               name="Cube077_14"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_14.geometry}
               material={materials["GREY PLASTIC"]}
             />
             <mesh
               name="Cube077_15"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_15.geometry}
               material={materials["RUBBER MATERIAL"]}
             />
             <mesh
               name="Cube077_16"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_16.geometry}
               material={materials["SCREEN.001"]}
             />
             <mesh
               name="Cube077_17"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_17.geometry}
               material={materials["SD PANEL"]}
             />
             <mesh
               name="Cube077_18"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_18.geometry}
               material={materials["GLASS.001"]}
             />
             <mesh
               name="Cube077_19"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_19.geometry}
               material={materials["BACK LOGO"]}
             />
             <mesh
               name="Cube077_20"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_20.geometry}
               material={materials["METAL.001"]}
             />
             <mesh
               name="Cube077_21"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_21.geometry}
               material={materials["COOLER.001"]}
             />
             <mesh
               name="Cube077_22"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_22.geometry}
               material={materials["HOLDER.001"]}
             />
             <mesh
               name="Cube077_23"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_23.geometry}
               material={materials["RED JOY-CON PLASTIC"]}
             />
             <mesh
               name="Cube077_24"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_24.geometry}
               material={materials["RED SEPARATION"]}
             />
             <mesh
               name="Cube077_25"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_25.geometry}
               material={materials["INFRARED.001"]}
             />
             <mesh
               name="Cube077_26"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_26.geometry}
               material={materials["LETTER MATERIAL"]}
             />
             <mesh
               name="Cube077_27"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_27.geometry}
               material={materials["AROUND HOME BUTTON"]}
             />
             <mesh
               name="Cube077_28"
+              castShadow
+              receiveShadow
               geometry={nodes.Cube077_28.geometry}
               material={materials["SPEAKER.001"]}
             />
           </group>
           <mesh
             name="table-buuton"
+            castShadow
+            receiveShadow
             geometry={nodes["table-buuton"].geometry}
             material={materials.table_button}
             position={[2.78, 1.76, 1.64]}
@@ -581,16 +692,22 @@ export function MyRoomModel(props: MyRoomModelProps) {
           >
             <mesh
               name="Body13001"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13001.geometry}
               material={materials["Rubber_-_Soft"]}
             />
             <mesh
               name="Body13001_1"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13001_1.geometry}
               material={materials["Bronze_-_Polished"]}
             />
             <mesh
               name="Body13001_2"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13001_2.geometry}
               material={
                 materials["Aluminum_-_Anodized_Glossy_(Grey)_keyboard.jpg"]
@@ -598,10 +715,21 @@ export function MyRoomModel(props: MyRoomModelProps) {
             />
             <mesh
               name="Body13001_3"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13001_3.geometry}
               material={materials["Steel_-_Satin"]}
             />
           </group>
+          <mesh
+            name="table002"
+            castShadow
+            receiveShadow
+            geometry={nodes.table002.geometry}
+            material={materials.wood}
+            scale={[0.11, 1, 0.15]}
+            userData={{ name: "table.002" }}
+          />
           <group
             name="macbookmoniter"
             position={[0.09, 1.95, -0.76]}
@@ -612,34 +740,37 @@ export function MyRoomModel(props: MyRoomModelProps) {
           >
             <mesh
               name="Body13007"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13007.geometry}
               material={materials["Acrylic_(Clear)"]}
             />
             <mesh
               name="Body13007_1"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13007_1.geometry}
               material={materials["Aluminum_-_Anodized_Glossy_(Grey)"]}
             />
             <mesh
               name="Body13007_2"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13007_2.geometry}
               material={materials["Plastic_-_Translucent_Matte_(Gray)"]}
             />
             <mesh
               name="Body13007_3"
+              castShadow
+              receiveShadow
               geometry={nodes.Body13007_3.geometry}
               material={materials["Glass_-_Heavy_Color"]}
             />
           </group>
           <mesh
-            name="table002"
-            geometry={nodes.table002.geometry}
-            material={materials.wood}
-            scale={[0.11, 1, 0.15]}
-            userData={{ name: "table.002" }}
-          />
-          <mesh
             name="cup001"
+            castShadow
+            receiveShadow
             geometry={nodes.cup001.geometry}
             material={materials.マテリアル}
             position={[1.99, 1.88, 0.75]}
@@ -647,16 +778,6 @@ export function MyRoomModel(props: MyRoomModelProps) {
             scale={0.2}
             userData={{ name: "cup.001" }}
           />
-          <mesh
-            name="floor"
-            geometry={nodes.floor.geometry}
-            material={materials.floor}
-            position={[0, 0, 2.56]}
-            rotation={[0, Math.PI / 2, 0]}
-            scale={5.55}
-            userData={{ name: "floor" }}
-          />
-          {props.children}
         </group>
       </group>
     </>
