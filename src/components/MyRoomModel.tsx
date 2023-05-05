@@ -135,8 +135,15 @@ export function MyRoomModel(props: MyRoomModelProps) {
   ) as GLTFResult;
   const { actions } = useAnimations(animations, group);
 
-  const handleMacbookClick = () => {
-    actions["macbook.007Action" as ActionName]?.reset().play();
+  const openMacbookAnimation = () => {
+    const action = actions["macbook.007Action"] as THREE.AnimationAction;
+    // アニメーションを再生して最後のフレームで停止
+    action.setLoop(THREE.LoopOnce, 1).play();
+    setTimeout(() => {
+      action.reset().play();
+      action.paused = true;
+      action.time = action.getClip().duration;
+    }, 1000);
   };
 
   useEffect(() => {
@@ -157,9 +164,9 @@ export function MyRoomModel(props: MyRoomModelProps) {
         enablePan={false} // パン操作の無効化
         minDistance={1} // ズームインの最小距離
         maxDistance={10} // ズームアウトの最大距離
-        // maxPolarAngle={Math.PI / 2} // 上方向への回転の制限
-        // minAzimuthAngle={-Math.PI / 4} //　左右の回転の制限
-        // maxAzimuthAngle={Math.PI / 4}
+        maxPolarAngle={Math.PI / 2} // 上方向への回転の制限
+        minAzimuthAngle={-Math.PI / 4} //　左右の回転の制限
+        maxAzimuthAngle={Math.PI / 4}
       />
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">
@@ -736,8 +743,21 @@ export function MyRoomModel(props: MyRoomModelProps) {
             rotation={[-Math.PI, 0, 0]}
             scale={0.48}
             userData={{ name: "macbook.moniter" }}
-            onClick={handleMacbookClick}
+            onClick={openMacbookAnimation}
           >
+            <Html
+              className="fixed left-0 top-0 h-full w-full"
+              position={[-1.675, 0.0, -2.0]}
+              rotation={[-1.57, 0, 0]}
+              distanceFactor={1.5}
+              transform
+              occlude
+            >
+              <iframe
+                className="h-[500px] w-[790px] rounded-2xl"
+                src="https://www.youtube.com/embed/MVPTGNGiI-4"
+              />
+            </Html>
             <mesh
               name="Body13007"
               castShadow
