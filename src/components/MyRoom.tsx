@@ -16,7 +16,7 @@ export const MyRoom = () => {
         />
       </Canvas>
       {!isLoaded && (
-        <div className="absolute left-1/2 top-1/2 z-20 flex">
+        <div className="absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2">
           <ChaoticOrbit size={50} speed={1.5} color="black" />
         </div>
       )}
