@@ -427,7 +427,7 @@ export function MyRoomModel(props: MyRoomModelProps) {
           />
           <Html
             className="fixed left-0 top-0 h-full w-full"
-            position={[1.2, 4.45, -1.18]}
+            position={[1.2, 4.45, -1.2]}
             rotation={[0, -0.37, 0]}
             distanceFactor={1.5}
             transform
@@ -435,7 +435,8 @@ export function MyRoomModel(props: MyRoomModelProps) {
           >
             <iframe
               className="h-[400px] w-[710px] p-2"
-              src="https://www.youtube.com/embed/MVPTGNGiI-4"
+              // src="https://www.youtube.com/embed/MVPTGNGiI-4"
+              src="/tweet.html"
             />
           </Html>
           <mesh
