@@ -394,14 +394,14 @@ export function MyRoomModel(props: MyRoomModelProps) {
           />
           <Html
             className="fixed left-0 top-0 h-full w-full"
-            position={[-1.57, 4.5, -1.21]}
+            position={[-2.68, 5.3, -1.21]}
             distanceFactor={1.5}
             transform
             occlude
           >
             <iframe
-              className="h-[400px] w-[710px] p-2"
-              src="https://www.youtube.com/embed/5qap5aO4i9A"
+              className="h-[832px] w-[1300px] scale-50 scale-x-[0.54] scale-y-[0.48] p-2"
+              src="https://my-portfolio-mauve-six-41.vercel.app/"
             />
           </Html>
           <mesh
