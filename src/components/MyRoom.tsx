@@ -20,12 +20,6 @@ export const MyRoom = () => {
           <ChaoticOrbit size={50} speed={1.5} color="black" />
         </div>
       )}
-      <div
-        onClick={() => {
-          // console.log("clicked");
-          // gltfのアニメーションを再生
-        }}
-      />
     </>
   );
 };
