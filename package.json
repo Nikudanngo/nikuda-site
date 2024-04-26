@@ -7,7 +7,8 @@
     "build": "next build && next export",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npm run build && scp -r ./out/* endo@sphyrna.rd.oit.ac.jp:public_html/"
+    "deploy": "npm run build && scp -r ./out/* endo@sphyrna.rd.oit.ac.jp:public_html/",
+    "view": "open https://www.oit.ac.jp/rd/labs/kobayashi-lab/~endo/index.html"
   },
   "dependencies": {
     "@react-three/drei": "^9.66.1",
